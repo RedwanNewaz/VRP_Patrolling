@@ -32,10 +32,17 @@ class Workspace:
         self.cov1 = self.env['Pdf'][1]['cov']
         self.cov2 = self.env['Pdf'][2]['cov']
 
-    @staticmethod
-    def get_samples(mu, cov, num_samples = 50):
-        x, y = np.random.multivariate_normal(mu, cov, num_samples).T
-        return np.array([x, y]).T
+
+    def get_samples(self,mu, cov, num_samples = 50):
+        xx, yy = np.random.multivariate_normal(mu, cov, 2*num_samples).T
+        X, Y = [], []
+        for x, y in zip(xx, yy):
+            if self(x,y):
+                X.append(x)
+                Y.append(y)
+            if len(X)>=num_samples:
+                break
+        return np.array([X, Y]).T
 
     @staticmethod
     def patrolling_locations(X, num_routes, result, count=0):
@@ -60,7 +67,9 @@ class Workspace:
             if p[0]>=box[0] and p[1]>=box[1] and p[0]<=box[2] and p[1]<=box[3]:
                 return False
         # -37.8, 12.25, -12.25, 11.25
-        if p[0] > -37.8 and p[1] > -12.25 and p[0] < 12.25 and p[1] < 11.25:
+        floor = self.env['Floor'][1]
+        # [12.5,12.53,-37.75,-12.2]
+        if p[0] > floor[2] and p[1] > floor[3] and p[0] < floor[0] and p[1] < floor[1]:
             return True
         else:
             return False
@@ -93,24 +102,15 @@ class Workspace:
         rv1 = multivariate_normal(self.mu2, self.cov2)
         ax.contourf(x, y, rv.pdf(pos)+rv1.pdf(pos))
 
+    def gen_samples(self):
         # samples
         X1 = self.get_samples(mu=self.mu1, cov=self.cov1, num_samples=50)
         X2 = self.get_samples(mu=self.mu2, cov=self.cov2, num_samples=50)
         X = np.vstack((X1, X2))
-        # ax.scatter(X[:,0], X[:, 1], color='r', s= 1 )
-
-        # example route
         result = {}
-        self.patrolling_locations(X, 10, result)
-        X = result[0]
-        ax.scatter(X[:, 0], X[:, 1], color='r', s=1)
-        # print(result.keys())
-
-        #depo = np.array([0, 0])
-        #patrolnodes = np.vstack((depo, result[0]))
-        #print(len(patrolnodes))
-        #vrproutes(10, patrolnodes[:, 0], patrolnodes[:, 1])
-        self.route = X
+        NUM_LOCATIONS_PER_PATROL = 10
+        self.patrolling_locations(X, NUM_LOCATIONS_PER_PATROL, result)
+        return result
 
 
 def check_collision(node, obstacleList):

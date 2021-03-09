@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from gurobipy import Model, GRB, quicksum
 
-def vrproutes(n, xc,yc, c):
+def vrproutes(n, xc,yc, cost_func):
     rnd = np.random
     rnd.seed(0)
     plt.plot(xc[0], yc[0], c='r', marker='s')
@@ -10,7 +10,8 @@ def vrproutes(n, xc,yc, c):
     N = [i for i in range(1, n+1)]
     V = [0] + N
     A = [(i, j) for i in V for j in V if i != j]
-    #c = {(i, j): np.hypot(xc[i]-xc[j], yc[i]-yc[j]) for i, j in A}
+    # c = {(i, j): np.hypot(xc[i]-xc[j], yc[i]-yc[j]) for i, j in A}
+    c = {(i, j): cost_func(i, j) for i, j in A}
     Q = 20
     q = {i: rnd.randint(1, 10) for i in N}
 
