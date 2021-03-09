@@ -1,6 +1,5 @@
 venv
 Environment.py
-main.py
 map.py
 __pycache__
 .idea
