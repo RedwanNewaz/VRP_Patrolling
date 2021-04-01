@@ -6,7 +6,7 @@ def vrproutes(n, xc,yc, cost_func):
     rnd = np.random
     rnd.seed(0)
     plt.plot(xc[0], yc[0], c='r', marker='s')
-    plt.scatter(xc[1:], yc[1:], c='b')
+    # plt.scatter(xc[1:], yc[1:], c='b')
     N = [i for i in range(1, n+1)]
     V = [0] + N
     A = [(i, j) for i in V for j in V if i != j]
