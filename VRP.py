@@ -15,9 +15,7 @@ def vrproutes(n, xc,yc, cost_func):
     print(c)
     Q = 20
     q = {i: rnd.randint(1, 10) for i in N}
-    # print(q)
-    # {1: 2, 2: 5, 3: 7, 4: 3, 5: 9, 6: 3, 7: 3, 8: 3, 9: 1, 10: 2}
-    # q = {1: 9, 2: 1, 3: 6, 4: 5, 5: 3, 6: 2, 7: 1, 8: 8, 9: 1, 10: 1}
+
     mdl = Model('CVRP')
 
     x = mdl.addVars(A, vtype=GRB.BINARY)
@@ -34,11 +32,11 @@ def vrproutes(n, xc,yc, cost_func):
     mdl.addConstrs(u[i] >= q[i] for i in N)
     mdl.addConstrs(u[i] <= Q for i in N)
 
-    mdl.Params.MIPGap = 0.1
+    mdl.Params.MIPGap = 0.001
     mdl.Params.TimeLimit = 60  # seconds
     mdl.optimize()
 
-    active_arcs = [a for a in A if x[a].x > 0.99]
+    active_arcs = [a for a in A if x[a].x > 0.5]
     return active_arcs
     # for i, j in active_arcs:
     #     plt.plot([xc[i], xc[j]], [yc[i], yc[j]], c='g', zorder=0)

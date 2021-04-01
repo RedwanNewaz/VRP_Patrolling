@@ -23,8 +23,8 @@ class VisibilityPlanner:
     def gen_path(start, goal, kdt, nodes, graph):
         loc1 = np.array([start])
         loc2 = np.array([goal])
-        cost1, neigh1 = kdt.query(loc1, k=2, return_distance=True)
-        cost2, neigh2 = kdt.query(loc2, k=2, return_distance=True)
+        cost1, neigh1 = kdt.query(loc1, k=1, return_distance=True)
+        cost2, neigh2 = kdt.query(loc2, k=1, return_distance=True)
 
         s = nodes[neigh1[-1][0]]
         g = nodes[neigh2[-1][0]]
