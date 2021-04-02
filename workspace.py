@@ -66,7 +66,8 @@ if __name__ == '__main__':
 
     xx1, yy1 = np.random.multivariate_normal(mean1, cov1, 5).T
     xx2, yy2 = np.random.multivariate_normal(mean2, cov2, 5).T
-    depo = np.array([-17, 0])
+    # depo = np.array([-17, 0])
+    depo = np.array([-15.5, -2.06])
     xx = [depo[0]] + xx1.tolist() + xx2.tolist()
     yy = [depo[1]] + yy1.tolist() + yy2.tolist()
     roadnet = np.array([xx, yy]).T
@@ -91,12 +92,12 @@ if __name__ == '__main__':
 
 
     planner.workspace.plot()
-    # plt.savefig('results/routes.eps', format = 'eps')
+    plt.savefig('results/routes.eps', format = 'eps')
     ax = plt.gca()
     draw_ellipse(mean1, cov1, ax)
     draw_ellipse(mean2, cov2, ax)
     ax.scatter(Z[:, 0], Z[:, 1], s=1)
-    plt.savefig('results/measurements.eps', format='eps')
+    # plt.savefig('results/measurements.eps', format='eps')
     plt.show()
 
 
